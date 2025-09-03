@@ -5,6 +5,11 @@ import os
 # O token virá do Railway (variável de ambiente)
 TOKEN = os.getenv("BOT_TOKEN")
 
+if not TOKEN:
+    print("❌ ERRO: BOT_TOKEN não encontrado nas variáveis de ambiente!")
+else:
+    print("✅ BOT_TOKEN carregado com sucesso.")
+
 texto_apresentacao = (
     "Oi amorzinho, bem-vindo! Tenho 22 aninhos, criada no interior. "
     "Posso parecer inocente, mas por trás do jeitinho meigo escondo uma safadeza "
@@ -22,6 +27,7 @@ texto_apresentacao = (
 
 # /start → mostra texto + botão "OBTER OFERTA"
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    print(f"📩 Recebi /start de {update.effective_user.username}")
     keyboard = [[InlineKeyboardButton("🔹 OBTER OFERTA 🔹", callback_data="oferta")]]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
@@ -33,6 +39,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # Quando clica em OBTER OFERTA → mostra planos
 async def mostrar_ofertas(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
+    print(f"🖱 Usuário {query.from_user.username} clicou em OBTER OFERTA")
     await query.answer()
 
     keyboard = [
@@ -52,6 +59,7 @@ async def mostrar_ofertas(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def escolher_plano(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     plano = query.data
+    print(f"💰 Usuário {query.from_user.username} escolheu {plano}")
     await query.answer()
 
     mensagens = {
